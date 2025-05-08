@@ -1,5 +1,5 @@
 /**
-* Copyright © 2024, Oracle and/or its affiliates. All rights reserved.
+* Copyright © 2025, Oracle and/or its affiliates. All rights reserved.
 *
 * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
@@ -222,6 +222,8 @@ return sharedInstance;
         [self didEnterBeaconRegion:call withResult:result];
     } else if ([@"onBeaconRegionExited" isEqualToString:call.method]) {
         [self didExitBeaconRegion:call withResult:result];
+    } else if ([@"setDeviceToken" isEqualToString:call.method]) {
+        [self setDeviceToken:call withResult:result];
     }
      else {
         result(FlutterMethodNotImplemented);
@@ -244,19 +246,26 @@ return sharedInstance;
 }
 
 - (void)registerApp:(FlutterMethodCall *)call withResult:(FlutterResult)result {
-    NSError *error;
-    BOOL useLocation = (BOOL) call.arguments;
     
     
-    [[PushIOManager sharedInstance] registerApp:&error useLocation:useLocation completionHandler:^(NSError *error, NSString *response) {
-        [self sendPluginResult:result withResponse:response andError:error];
-    }];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSError *regError = nil;
+        BOOL useLocation = (BOOL) call.arguments;
+        [[PushIOManager sharedInstance] registerApp:&regError useLocation:useLocation completionHandler:^(NSError *error, NSString *response) {
+            [self sendPluginResult:result withResponse:response andError:error];
+        }];
+    });
 }
 
 - (void)registerForAllRemoteNotificationTypes:(FlutterMethodCall *)call withResult:(FlutterResult)result {
-    [[PushIOManager sharedInstance] registerForAllRemoteNotificationTypes:^(NSError *error, NSString *response) {
-        [self sendPluginResult:result withResponse:response andError:error];
-    }];
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [[PushIOManager sharedInstance] registerForAllRemoteNotificationTypes:^(NSError *error, NSString *response) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [self sendPluginResult:result withResponse:response andError:error];
+            });
+        }];
+    });
 }
 
 - (void)registerForAllRemoteNotificationTypesWithCategories:(FlutterMethodCall *)call withResult:(FlutterResult)result {
@@ -1173,6 +1182,20 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
         
     }];
+}
+
+-(void)setDeviceToken:(FlutterMethodCall *)call withResult:(FlutterResult)result {
+    id value = call.arguments;
+    if (value == (id)[NSNull null]) {
+        value = nil;
+    }
+    NSString *deviceToken = value; 
+    if(deviceToken != nil) {
+        [[PushIOManager sharedInstance] didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+        [self sendPluginResult:result withResponse:nil andError:nil];
+    } else {
+        [self sendPluginResult:result withResponse:nil andError:nil];
+    }
 }
 
 
