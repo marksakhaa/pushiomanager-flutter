@@ -916,7 +916,12 @@ return sharedInstance;
 
     BOOL isDeepLinkHandlerSet =  [[NSUserDefaults standardUserDefaults] boolForKey:@"PIODeeplinkHandler"];
     if(isDeepLinkHandlerSet) {
-        [self.channel invokeMethod:@"setNotificationDeepLinkHandler" arguments:[url absoluteString]];
+       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)),
+dispatch_get_main_queue(), ^{
+    [self.channel invokeMethod:@"setNotificationDeepLinkHandler"
+                     arguments:url.absoluteString];
+});
+
         return YES;
     }else{
         return NO;
