@@ -52,6 +52,7 @@ import com.pushio.manager.exception.ValidationException;
 import com.pushio.manager.preferences.PushIOPreference;
 import com.pushio.manager.tasks.PushIOEngagementListener;
 import com.pushio.manager.tasks.PushIOListener;
+import com.pushio.manager.PIOMCMessageStatusListener;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -80,6 +81,56 @@ public class PushIOManagerFlutterPlugin
     private SharedPreferences mPreferences;
     private Intent launchIntent;
 
+
+    /** 1️⃣ Enable/disable MC read/unread tracking */
+    private void setMCMessageReadStatusEnabled(MethodCall call, Result result) {
+        boolean enabled = call.arguments();
+        mPushIOManager.setMCMessageReadStatusEnabled(enabled);
+        result.success(null);
+    }
+
+    /** 2️⃣ Query whether MC read/unread tracking is enabled */
+    private void isMCMessageReadStatusEnabled(MethodCall call, Result result) {
+        result.success(mPushIOManager.isMCMessageReadStatusEnabled());
+    }
+
+    /**
+     * 3️⃣ Mark a single Message-Center message read/unread
+     * Expects arguments: {"messageId": "...", "readStatus": true}
+     */
+    private void trackMessageCenterMessageStatus(MethodCall call, final Result result) {
+        String messageId   = call.argument("messageId");
+        boolean readStatus = call.argument("readStatus");
+
+        mPushIOManager.trackMessageCenterMessageStatus(
+                messageId,
+                readStatus,
+                new PIOMCMessageStatusListener() {
+                    @Override
+                    public void onSuccess() {
+                        result.success(null);
+                    }
+                    @Override
+                    public void onFailure(String id, String reason) {
+                        result.error(id, reason, null);
+                    }
+                }
+        );
+    }
+
+    /** 4️⃣ Exclude the registered userId from UBI payloads */
+    private void excludeUserIdFromUBI(MethodCall call, Result result) {
+        boolean exclude = call.arguments();
+        mPushIOManager.excludeUserIdFromUBI(exclude);
+        result.success(null);
+    }
+
+    /** 5️⃣ Supply your Responsys Auth Secret to the SDK */
+    private void setSecret(MethodCall call, Result result) {
+        String secret = call.arguments();
+        mPushIOManager.setSecret(secret);
+        result.success(null);
+    }
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         PIOLogger.v("FL oATE");
