@@ -418,6 +418,33 @@ class PushIOManager {
         'trackMessageCenterDisplayEngagement', messageID);
   }
 
+  static Future<void> setMCMessageReadStatusEnabled(bool isEnabled) async {
+    return await _channel.invokeMethod(
+      'setMCMessageReadStatusEnabled',
+      isEnabled,
+    );
+  }
+
+  static Future<bool?> isMCMessageReadStatusEnabled() async {
+    final bool? enabled = await _channel.invokeMethod(
+      'isMCMessageReadStatusEnabled',
+    );
+    return enabled;
+  }
+
+  static Future<void> trackMessageCenterMessageStatus(
+      String messageId,
+      bool readStatus,
+      ) async {
+    return await _channel.invokeMethod(
+      'trackMessageCenterMessageStatus',
+      {
+        'messageId': messageId,
+        'readStatus': readStatus,
+      },
+    );
+  }
+
   static Future<void> clearInAppMessages() async {
     return await _channel.invokeMethod('clearInAppMessages');
   }
