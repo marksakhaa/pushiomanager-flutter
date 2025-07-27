@@ -75,7 +75,7 @@ Before installing the plugin, you must setup your app to receive push notificati
 - Log in to the [Responsys Mobile App Developer Console](https://docs.oracle.com/en/cloud/saas/marketing/responsys-develop-mobile/dev-console/login/) and enter your Auth Key and other details for your iOS app.
 - Download the `pushio_config.json` file generated from your credentials.
 - Download the SDK binary from [here](https://www.oracle.com/downloads/applications/cx/responsys-mobile-sdk.html).
-- After adding the plugin in your app, copy `CX_Mobile_SDK.xcframework` and place it in the plugin ios directory - `pushiomanager-flutter/ios/`. Make sure to remove the `PushIOManager.xcframework` if previously copied to this path
+- After adding the plugin in your app, copy `<CXMobileSDK.xcframework` and place it in the plugin ios directory - `pushiomanager-flutter/ios/`. Make sure to remove the `PushIOManager.xcframework` if previously copied to this path
 
 ![framework Image](./img/ios_framework.png "framework Image")
 

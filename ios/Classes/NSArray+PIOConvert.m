@@ -7,7 +7,7 @@
 
 #import "NSArray+PIOConvert.h"
 #import "NSDictionary+PIOConvert.h"
-#import <CX_Mobile_SDK/CX_Mobile_SDK.h>
+#import <<CXMobileSDK/<CXMobileSDK.h>
 
 @implementation NSArray (PIOConvert)
 - (NSArray *)messageDictionary {
