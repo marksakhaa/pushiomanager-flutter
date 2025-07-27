@@ -5,8 +5,8 @@
 */
 
 #import "PushIOManagerFlutterPlugin.h"
-#import <<CXMobileSDK/<CXMobileSDK.h>
-#import <<CXMobileSDK/ORACoreConfig.h>
+#import <CXMobileSDK/CXMobileSDK.h>
+#import <CXMobileSDK/ORACoreConfig.h>
 #import "NSDictionary+PIOConvert.h"
 #import "NSArray+PIOConvert.h"
 #import <UserNotifications/UserNotifications.h>

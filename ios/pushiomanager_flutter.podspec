@@ -17,10 +17,10 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.platform = :ios, '12.0'
-  s.preserve_paths = '<CXMobileSDK.xcframework'
-  s.xcconfig = { 'OTHER_LDFLAGS' => '-framework <CXMobileSDK -ObjC' }
-  s.vendored_frameworks = '<CXMobileSDK.xcframework','OracleCXLocationSDK.xcframework'
-  s.preserve_paths 	  = "<CXMobileSDK.xcframework/**/*","OracleCXLocationSDK.xcframework/**/*"
+  s.preserve_paths = 'CXMobileSDK.xcframework'
+  s.xcconfig = { 'OTHER_LDFLAGS' => '-framework CXMobileSDK -ObjC' }
+  s.vendored_frameworks = 'CXMobileSDK.xcframework','OracleCXLocationSDK.xcframework'
+  s.preserve_paths 	  = "CXMobileSDK.xcframework/**/*","OracleCXLocationSDK.xcframework/**/*"
   s.libraries               = 'sqlite3'
   s.frameworks              = 'UserNotifications', 'Foundation', 'UIKit'
   s.ios.frameworks          = 'WebKit'
