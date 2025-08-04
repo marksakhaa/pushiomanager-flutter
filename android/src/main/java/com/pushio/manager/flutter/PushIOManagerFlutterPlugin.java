@@ -263,7 +263,7 @@ public class PushIOManagerFlutterPlugin
                     launchIntent = null;
                 }
             }
-        }, 1500);
+        }, 2000);
     }
 
     private void getAPIKey(MethodCall call, Result result) {
